@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  wppconnect-local:
+    container_name: wppconnect-local
+    image: vieirajrrr/sirio-wppconnect:latest
+    ports:
+      - "21465:21465"
+    environment:
+      - PORT=21465
+      - TOKENAPI=defaultsecret
+    networks:
+      - sirio-net
+
+networks:
+  sirio-net:
+    external: true
