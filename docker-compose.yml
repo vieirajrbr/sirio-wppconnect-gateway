@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   wppconnect:
     build:
@@ -8,18 +10,13 @@ services:
       - "21465:21465"
     networks:
       - sirio-net
-    volumes:
-      - wppconnect-data:/usr/src/app/userDataDir
     environment:
       - TOKENAPI=defaultsecret
       - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
       - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
       - NODE_ENV=production
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
+    volumes:
+      - wppconnect-data:/usr/src/app/userDataDir
     restart: unless-stopped
 
 volumes:
