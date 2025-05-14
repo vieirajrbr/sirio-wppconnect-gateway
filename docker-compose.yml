@@ -1,16 +1,21 @@
 version: "3.8"
 
 services:
-  wppconnect-local:
-    container_name: wppconnect-local
-    image: vieirajrrr/sirio-wppconnect:latest
+  wppconnect:
+    build: .
+    container_name: wppconnect
     ports:
       - "21465:21465"
     environment:
       - PORT=21465
       - TOKENAPI=defaultsecret
+      - SECRET_KEY=supersecreto123
+    volumes:
+      - ./tokens:/tokens
     networks:
       - sirio-net
+    restart: unless-stopped
+    command: ["npm", "start"]
 
 networks:
   sirio-net:
