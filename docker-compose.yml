@@ -1,21 +1,29 @@
-version: "3.8"
-
 services:
   wppconnect:
-    build: .
-    container_name: wppconnect
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wppconnect-server
     ports:
       - "21465:21465"
-    environment:
-      - PORT=21465
-      - TOKENAPI=defaultsecret
-      - SECRET_KEY=supersecreto123
-    volumes:
-      - ./tokens:/tokens
     networks:
       - sirio-net
+    volumes:
+      - wppconnect-data:/usr/src/app/userDataDir
+    environment:
+      - TOKENAPI=defaultsecret
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      - NODE_ENV=production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
     restart: unless-stopped
-    command: ["npm", "start"]
+
+volumes:
+  wppconnect-data:
 
 networks:
   sirio-net:
