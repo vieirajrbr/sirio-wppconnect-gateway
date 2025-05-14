@@ -1,12 +1,4 @@
 node_modules
-npm-debug.log
-Dockerfile
-.dockerignore
-.git
-.gitignore
-.github
-.hust
-*.tgz
 dist
-log
 tokens
+*.log
