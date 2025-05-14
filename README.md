@@ -1,46 +1,50 @@
-# sirio-wppconnect-gateway
+# Sirio WPPConnect Gateway
 
-Este repositório contém apenas a infraestrutura Docker necessária para rodar o servidor WPPConnect como container isolado.
+Gateway Dockerizado do servidor WPPConnect para integrar com o backend Sirio.
 
-### Objetivo
-Rodar o container WPPConnect acessível em `localhost:21465` com as variáveis de ambiente necessárias, conectado a uma rede Docker (`sirio-net`) que permita a comunicação com o container principal do Sirio.
+---
 
-### Requisitos
-- Docker Desktop
-- Node.js (já incluso na imagem)
+## 🔧 Variáveis de Ambiente
 
-### Variáveis de ambiente
-- `PORT=21465`
+A autenticação da API é feita por token.
+
 - `TOKENAPI=defaultsecret`
 
-### Como rodar
-```bash
-docker build -t sirio/wppconn .
+---
 
-# rede já deve existir: sirio-net
-docker run -d \
-  --name wppconnect-local \
-  --network sirio-net \
-  -p 21465:21465 \
-  -e PORT=21465 \
-  -e TOKENAPI=defaultsecret \
-  sirio/wppconn
+## 🚀 Como testar
+
+Após o container estar rodando, o seguinte endpoint deve funcionar:
+
+### Endpoint:
+
+```
+POST http://localhost:21465/api/sirio/start-session
 ```
 
-### Testes
-Após subir, envie um POST para `http://localhost:21465/api/sirio/start-session` com o token gerado, e verifique o QR Code em base64.
+### Headers:
 
-### Observações
-- Nenhuma lógica do Sirio é exposta neste container.
-- Nenhuma tela administrativa ou dashboard do WPPConnect deve ser habilitada.
-- Esta imagem serve apenas como **gateway de mensagens via WhatsApp**.
+```
+Authorization: Bearer defaultsecret  
+Content-Type: application/json
+```
 
----
+### Body:
 
-Você deve clonar este repositório, seguir as instruções e garantir que tudo funcione localmente.
+```json
+{
+  "webhook": "",
+  "session": "sirio"
+}
+```
 
-Dúvidas? A comunicação será feita via Pull Request ou comentários diretos neste repositório.
+### Esperado:
 
----
+Resposta com status `200 OK` e corpo contendo:
 
-> Preparado exclusivamente para integração com o backend Sirio. Nenhuma outra dependência necessária.
+```json
+{
+  "status": "QRCODE",
+  "qrcode": "data:image/png;base64,..."
+}
+```
